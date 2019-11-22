@@ -1,0 +1,24 @@
+---
+  - name: "APACHE INSTALL"
+    hosts: all
+
+    tasks:
+      - name: install the latest version of Apache
+        yum:
+          name: httpd
+          state: latest
+
+  - name: "ENABLE and start APACHE"
+    hosts: all
+
+    tasks:
+      - name: enable service httpd and ensure it is not masked
+        systemd:
+          name: httpd
+          enabled: yes
+          masked: no
+    
+      - name: Make sure a service is running
+        systemd:
+          state: started
+          name: httpd

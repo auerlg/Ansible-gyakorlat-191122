@@ -1,0 +1,4 @@
+feri
+
+[all:vars]
+ansible_connection=local
