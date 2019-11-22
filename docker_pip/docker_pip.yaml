@@ -1,0 +1,40 @@
+---
+- name: Install dependecy (pip docker)
+  hosts: localhost
+
+  tasks:
+
+    - name: install the latest version of pip
+      yum:
+        name: python-pip
+        state: latest
+
+    - name: Install docker with pip
+      pip:
+        name: docker
+
+- name: Create docker containers
+  hosts: localhost
+
+  tasks:
+    - name: Create container
+      docker_container:
+        image: busybox
+        command: sleep 1d
+        name: "busy{{ item }}"
+      with_sequence: count=3
+
+    - name: add them to hosts
+      add_host:
+        name: "busy{{ item }}"
+        groups: created_dockers
+        ansible_connection: docker
+      with_sequence: count=3
+
+- name: message from docker
+  hosts: created_dockers
+  gather_facts: False
+
+  tasks:
+    - name: hostname echo
+      raw: echo $HOSTNAME

@@ -1,0 +1,13 @@
+---
+  - name: "DOCKER INSTALL"
+    hosts: all
+  
+  tasks:
+    - name: Install common software requirements
+    become: true
+    yum:
+      state: present
+      name: 
+        - yum-utils
+        - device-mapper-persistent-data
+        - lvm2

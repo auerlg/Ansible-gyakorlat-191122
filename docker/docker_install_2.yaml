@@ -1,0 +1,38 @@
+---
+- name: Install docker CE
+  hosts: all
+
+  tasks:
+    - name: Add repository epel
+      yum_repository:
+        name: epel
+        description: epel repo
+        baseurl: https://download.fedoraproject.org/pub/epel/$releasever/$basearch/
+        gpgcheck: no
+
+    - name: Install dependencies
+      yum:
+        name: "{{ packages }}"
+      vars:
+        packages:
+        - yum-utils
+    
+    - name: Add repository docker
+      yum_repository:
+        name: docker-ce
+        description: Decker CE repo
+        baseurl: https://download.docker.com/linux/centos/7/$basearch/stable/
+        gpgcheck: no
+
+    - name: Install docker community edition
+      yum:
+        name: "{{ packages }}"
+      vars:
+        packages:
+        - docker-ce
+
+    - name: Start service docker, if not started
+      service:
+        name: docker
+        state: started
+        enabled: yes
