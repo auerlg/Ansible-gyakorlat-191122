@@ -22,3 +22,19 @@
         systemd:
           state: started
           name: httpd
+
+  - name: "Firewall setup"
+    hosts: all
+
+    tasks:
+  
+      - name: "Firewall setup"
+        firewalld:
+          service: http
+          permanent: true
+          state: enabled
+
+      - name: reload service firewalld, in all cases
+        systemd:
+         name: firewalld
+         state: reloaded
